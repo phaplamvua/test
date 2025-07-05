@@ -1,0 +1,4 @@
+controller.AccountController=javax.servlet.annotation.WebServlet
+controller.CategoryController=javax.servlet.annotation.WebServlet
+controller.MainController=javax.servlet.annotation.WebServlet
+controller.ProductController=javax.servlet.annotation.WebServlet
