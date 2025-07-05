@@ -91,6 +91,10 @@
             <c:if test="${not empty error}">
                 <div class="error">${error}</div>
             </c:if>
+
+
+
+
             <form action="${pageContext.request.contextPath}/MainController?entity=account&action=login" method="post">
                 <input type="text" name="account" placeholder="Account" value="${param.account}" required>
                 <input type="password" name="pass" placeholder="Password" required>
