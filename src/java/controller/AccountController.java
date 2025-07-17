@@ -88,24 +88,28 @@ public class AccountController extends HttpServlet {
         String rememberMe = request.getParameter("rememberMe");
 
         Account account = accountDAO.getAccount(accountId, pass);
-        switch (account.getRoleInSystem()) {
-            case 1: //Admin
-                request.setAttribute("account", account);
-                sessionCategory(request, response);
-                sessionProduct(request, response);
-                sessionListAccount(request, response);
-                rememberMe(response, rememberMe, accountId, pass);
-                url = "/WEB-INF/jsp/dashboard.jsp";
-                break;
-            case 2: //Manager
-                request.setAttribute("account", account);
-                sessionCategory(request, response);
-                sessionProduct(request, response);
-                rememberMe(response, rememberMe, accountId, pass);
-                url = "/product.jsp";
-                break;
-            default:
-                request.setAttribute("error", "Invalid User Role");
+        if (account != null) {
+            switch (account.getRoleInSystem()) {
+                case 1: //Admin
+                    request.setAttribute("account", account);
+                    sessionCategory(request, response);
+                    sessionProduct(request, response);
+                    sessionListAccount(request, response);
+                    rememberMe(response, rememberMe, accountId, pass);
+                    url = "/WEB-INF/jsp/dashboard.jsp";
+                    break;
+                case 2: //Manager
+                    request.setAttribute("account", account);
+                    sessionCategory(request, response);
+                    sessionProduct(request, response);
+                    rememberMe(response, rememberMe, accountId, pass);
+                    url = "/product.jsp";
+                    break;
+                default:
+                    request.setAttribute("error", "Invalid User Role");
+            }
+        } else {
+            request.setAttribute("error", "Invalid User Name or Password");
         }
         request.getRequestDispatcher(url).forward(request, response);
     }
