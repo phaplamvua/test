@@ -101,8 +101,7 @@ public class ProductController extends HttpServlet {
             Integer category = categoryId != null && !categoryId.isEmpty() ? Integer.valueOf(categoryId) : null;
 
             // Truy vấn cơ sở dữ liệu
-            //ArrayList<Product> products = productDAO.searchProductName(search, sort, min, max, discount, category);
-            ArrayList<Product> products = productDAO.searchProductName(search, null, null, null, false, null);
+            ArrayList<Product> products = productDAO.searchProductName(search, sort, min, max, discount, category);
             
             String json = gson.toJson(products);
             response.setStatus(HttpServletResponse.SC_OK);

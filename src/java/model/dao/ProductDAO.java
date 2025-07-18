@@ -52,9 +52,7 @@ public class ProductDAO {
         ArrayList<Product> products = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
         if (search != null && !search.isEmpty()) {
-            sql.append(" AND productName LIKE ?");
-        } else {
-            return getAllProducts();
+            sql.append(" AND productName COLLATE Latin1_General_CI_AI LIKE ?");
         }
         if (minPrice != null) {
             sql.append(" AND price >= ?");
@@ -69,7 +67,8 @@ public class ProductDAO {
             sql.append(" AND typeId = ?");
         }
         if (sort != null && !sort.isEmpty()) {
-            sql.append(" ORDER BY ").append(sort);
+            String[] temp = sort.split("_");
+            sql.append(" ORDER BY " + temp[0] + " " + temp[1]);
         }
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {

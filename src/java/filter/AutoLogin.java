@@ -137,6 +137,20 @@ public class AutoLogin implements Filter {
                     shouldBeSkipped = true;
                 }
             }
+
+            // 4. IMPORTANT: Skip AJAX requests (product search)
+            if ("product".equals(entity)) {
+                if ("search".equals(action) || "get".equals(action) || "list".equals(action) || "listtopage".equals(action)) {
+                    shouldBeSkipped = true;
+                }
+            }
+
+            // 5. Check if it's an AJAX request by looking at headers
+            String ajaxHeader = req.getHeader("X-Requested-With");
+            if ("XMLHttpRequest".equals(ajaxHeader)) {
+                shouldBeSkipped = true;
+            }
+
             // Nếu yêu cầu thuộc danh sách bỏ qua, cho nó đi tiếp và kết thúc
             if (shouldBeSkipped) {
                 log("AutoLogin: Skipping filter for " + uri);
