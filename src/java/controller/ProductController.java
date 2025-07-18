@@ -80,30 +80,38 @@ public class ProductController extends HttpServlet {
         request.setAttribute("products", products);
         request.getRequestDispatcher("/product.jsp").forward(request, response);
     }
-    
-    private void searchProducts(HttpServletRequest request, HttpServletResponse response) 
+
+    private void searchProducts(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        String search = request.getParameter("search");
-        String sort = request.getParameter("sort");
-        String minPrice = request.getParameter("minPrice");
-        String maxPrice = request.getParameter("maxPrice");
-        String hasDiscount = request.getParameter("hasDiscount");
-        String categoryId = request.getParameter("categoryId");
-
-        // Xử lý các tham số
-        Double min = minPrice != null && !minPrice.isEmpty() ? Double.valueOf(minPrice) : null;
-        Double max = maxPrice != null && !maxPrice.isEmpty() ? Double.valueOf(maxPrice) : null;
-        boolean discount = "true".equals(hasDiscount);
-        Integer category = categoryId != null && !categoryId.isEmpty() ? Integer.valueOf(categoryId) : null;
-
-        // Truy vấn cơ sở dữ liệu
-        ArrayList<Product> products = productDAO.searchProductName(search, sort, min, max, discount, category);
-
-        // Chuyển đổi sang JSON
-        String json = gson.toJson(products);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+
+        try {
+            String search = request.getParameter("search");
+            String sort = request.getParameter("sort");
+            String minPrice = request.getParameter("minPrice");
+            String maxPrice = request.getParameter("maxPrice");
+            String hasDiscount = request.getParameter("hasDiscount");
+            String categoryId = request.getParameter("categoryId");
+
+            // Xử lý các tham số
+            Double min = minPrice != null && !minPrice.isEmpty() ? Double.valueOf(minPrice) : null;
+            Double max = maxPrice != null && !maxPrice.isEmpty() ? Double.valueOf(maxPrice) : null;
+            boolean discount = "true".equals(hasDiscount);
+            Integer category = categoryId != null && !categoryId.isEmpty() ? Integer.valueOf(categoryId) : null;
+
+            // Truy vấn cơ sở dữ liệu
+            //ArrayList<Product> products = productDAO.searchProductName(search, sort, min, max, discount, category);
+            ArrayList<Product> products = productDAO.searchProductName(search, null, null, null, false, null);
+            
+            String json = gson.toJson(products);
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write(json);
+        } catch (Exception e) {
+            String errorJson = "{\"error\": \"An error occurred while searching products: " + e.getMessage() + "\"}";
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write(errorJson);
+        }
     }
 
     private void getProduct(HttpServletRequest request, HttpServletResponse response)

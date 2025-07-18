@@ -134,7 +134,7 @@
             <button id="applyFilters">Apply</button>
         </div>
         <div id="productGrid" class="product-grid">
-            <c:forEach var="product" items="${products}">
+            <!--<c:forEach var="product" items="${products}">
                 <div class="product-item">
                     <c:if test="${not empty product.productImage}">
                         <img src="${pageContext.request.contextPath}/${product.productImage}" alt="${product.productName}">
@@ -142,7 +142,7 @@
                     <h3>${product.productName}</h3>
                     <p>Price: <fmt:formatNumber value="${product.price}" type="currency" /></p>
                 </div>
-            </c:forEach>
+            </c:forEach>-->
         </div>
         <div class="loading" id="loading">
             <img src="${pageContext.request.contextPath}/images/loading.gif" alt="Loading...">
@@ -163,6 +163,7 @@
         var productGrid = document.getElementById('productGrid');
         var loading = document.getElementById('loading');
         var errorDiv = document.getElementById('error');
+        var formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 
         function fetchProducts() {
             var search = searchInput.value;
@@ -178,7 +179,8 @@
             fetch(url)
                     .then(function (response) { // Sử dụng hàm function() thay cho hàm mũi tên
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            return response.text().then(text => { throw new Error('Server error: ' + text); });
+                            //throw new Error('Network response was not ok');
                         }
                         return response.json();
                     })
@@ -209,7 +211,7 @@
 
                     div.innerHTML = imageHtml +
                             '<h3>' + product.productName + '</h3>' +
-                            '<p>Price: <fmt:formatNumber value="' + formatter.format(product.price) + '" type="currency" /></p>';
+                            '<p>Price: ' + formatter.format(product.price) + '</p>';
 
                     productGrid.appendChild(div);
                 });
@@ -222,6 +224,8 @@
         });
 
         applyFilters.addEventListener('click', fetchProducts);
+        
+        fetchProducts();
     </script>
 </body>
 </html>

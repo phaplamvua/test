@@ -53,6 +53,8 @@ public class ProductDAO {
         StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
         if (search != null && !search.isEmpty()) {
             sql.append(" AND productName LIKE ?");
+        } else {
+            return getAllProducts();
         }
         if (minPrice != null) {
             sql.append(" AND price >= ?");
