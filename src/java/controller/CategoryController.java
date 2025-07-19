@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -60,7 +62,7 @@ public class CategoryController extends HttpServlet {
             throws SQLException, ServletException, IOException {
         ArrayList<Category> categories = categoryDAO.getAllCategories();
         request.setAttribute("categories", categories);
-        request.getRequestDispatcher("WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        //request.getRequestDispatcher("WEB-INF/jsp/dashboard.jsp").forward(request, response);
     }
 
     private void getCategory(HttpServletRequest request, HttpServletResponse response)
@@ -73,16 +75,26 @@ public class CategoryController extends HttpServlet {
 
     private void addCategory(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Category category = extractCategoryFromRequest(request);
-        categoryDAO.addCategory(category);
-        response.sendRedirect("MainController?entity=category&action=list");
+        try {
+            Category category = extractCategoryFromRequest(request);
+            categoryDAO.addCategory(category);
+            listCategories(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        } catch (ServletException ex) {
+            Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void updateCategory(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Category category = extractCategoryFromRequest(request);
-        categoryDAO.updateCategory(category);
-        response.sendRedirect("MainController?entity=category&action=list");
+        try {
+            Category category = extractCategoryFromRequest(request);
+            categoryDAO.updateCategory(category);
+            listCategories(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        } catch (ServletException ex) {
+            Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void deleteCategory(HttpServletRequest request, HttpServletResponse response)
