@@ -151,6 +151,15 @@ public class AutoLogin implements Filter {
             if ("XMLHttpRequest".equals(ajaxHeader)) {
                 shouldBeSkipped = true;
             }
+            
+            //6. Allow admin to access all JSPs in WEB-INF/jsp
+            if (session != null && session.getAttribute("account") != null) {
+                Account account = (Account) session.getAttribute("account");
+                if (account.getRoleInSystem() == 1 && uri.contains("/WEB-INF/jsp/")) {
+                    chain.doFilter(request, response);
+                    return;
+                }
+            }
 
             // Nếu yêu cầu thuộc danh sách bỏ qua, cho nó đi tiếp và kết thúc
             if (shouldBeSkipped) {

@@ -75,14 +75,11 @@ public class CategoryController extends HttpServlet {
 
     private void addCategory(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        try {
-            Category category = extractCategoryFromRequest(request);
-            categoryDAO.addCategory(category);
-            listCategories(request, response);
-            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
-        } catch (ServletException ex) {
-            Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Category category = extractCategoryFromRequest(request);
+        categoryDAO.addCategory(category);
+        ArrayList<Category> categories = categoryDAO.getAllCategories();
+        request.getSession().setAttribute("categories", categories);
+        response.sendRedirect("/WEB-INF/jsp/dashboard.jsp");
     }
 
     private void updateCategory(HttpServletRequest request, HttpServletResponse response)
@@ -104,7 +101,7 @@ public class CategoryController extends HttpServlet {
         response.sendRedirect("MainController?entity=category&action=list");
     }
 
-    private Category extractCategoryFromRequest(HttpServletRequest request) {        
+    private Category extractCategoryFromRequest(HttpServletRequest request) {
         Category category = new Category();
         String typeId = request.getParameter("typeId");
         if (typeId != null && !typeId.isEmpty()) {
