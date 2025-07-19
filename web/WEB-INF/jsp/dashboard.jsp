@@ -82,7 +82,7 @@
         <!-- CRUD Category -->
         <div id="category-section" class="section">
             <h3>Quản lý danh mục</h3>
-            <form action="/main?entity=category&action=add" method="post">
+            <form action="${pageContext.request.contextPath}/MainController?entity=category&action=add" method="post">
                 <div class="form-group">
                     <label>Tên danh mục:</label>
                     <input type="text" name="categoryName" required>
@@ -93,6 +93,10 @@
                 </div>
                 <input type="submit" value="Thêm danh mục">
             </form>
+                <div>
+                    <c:if test="${not empty errorCate}">${errorCate}</c:if>
+                </div>
+                
             <table>
                 <tr>
                     <th>ID</th>
@@ -106,8 +110,8 @@
                         <td>${category.categoryName}</td>
                         <td>${category.memo}</td>
                         <td>
-                            <a href="/main?entity=category&action=get&typeId=${category.typeId}">Sửa</a>
-                            <a href="/main?entity=category&action=delete&typeId=${category.typeId}" 
+                            <a href="/MainController?entity=category&action=get&typeId=${category.typeId}">Sửa</a>
+                            <a href="/MainController?entity=category&action=delete&typeId=${category.typeId}" 
                                onclick="return confirm('Xóa danh mục này?')">Xóa</a>
                         </td>
                     </tr>
@@ -118,7 +122,7 @@
         <!-- CRUD Product -->
         <div id="product-section" class="section">
             <h3>Quản lý sản phẩm</h3>
-            <form action="/main?entity=product&action=add" method="post">
+            <form action="/MainController?entity=product&action=add" method="post">
                 <div class="form-group">
                     <label>ID sản phẩm:</label>
                     <input type="text" name="productId" required>
@@ -182,8 +186,8 @@
                         <td><fmt:formatNumber value="${product.price}" type="currency" /></td>
                         <td>${product.discount}%</td>
                         <td>
-                            <a href="/main?entity=product&action=get&productId=${product.productId}">Sửa</a>
-                            <a href="/main?entity=product&action=delete&productId=${product.productId}" 
+                            <a href="/MainController?entity=product&action=get&productId=${product.productId}">Sửa</a>
+                            <a href="/MainController?entity=product&action=delete&productId=${product.productId}" 
                                onclick="return confirm('Xóa sản phẩm này?')">Xóa</a>
                         </td>
                     </tr>
@@ -209,7 +213,7 @@
                         <td>${account.lastName} ${account.firstName}</td>
                         <td>${account.use ? 'Đang sử dụng' : 'Bị khóa'}</td>
                         <td>
-                            <form action="/main?entity=account&action=updateRole" method="post" style="display:inline;">
+                            <form action="/MainController?entity=account&action=updateRole" method="post" style="display:inline;">
                                 <input type="hidden" name="account" value="${account.account}">
                                 <select name="roleInSystem">
                                     <option value="1" ${account.roleInSystem == 1 ? 'selected' : ''}>Admin</option>
@@ -218,7 +222,7 @@
                             </form>
                         </td>
                         <td>
-                            <form action="/main?entity=account&action=toggleBan" method="post" style="display:inline;">
+                            <form action="/MainController?entity=account&action=toggleBan" method="post" style="display:inline;">
                                 <input type="hidden" name="account" value="${account.account}">
                                 <input type="hidden" name="isUse" value="${account.use ? '0' : '1'}">
                                 <button type="submit">${account.use ? 'Khóa' : 'Mở khóa'}</button>
