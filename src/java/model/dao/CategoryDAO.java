@@ -10,8 +10,8 @@ public class CategoryDAO {
     public void addCategory(Category category) throws SQLException {
         String sql = "INSERT INTO categories (categoryName, memo) VALUES (?, ?)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, category.getCategoryName());
-            stmt.setString(2, category.getMemo());
+            stmt.setNString(1, category.getCategoryName());
+            stmt.setNString(2, category.getMemo());
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -28,8 +28,8 @@ public class CategoryDAO {
             if (rs.next()) {
                 Category category = new Category();
                 category.setTypeId(rs.getInt("typeId"));
-                category.setCategoryName(rs.getString("categoryName"));
-                category.setMemo(rs.getString("memo"));
+                category.setCategoryName(rs.getNString("categoryName"));
+                category.setMemo(rs.getNString("memo"));
                 return category;
             }
             return null;
@@ -44,8 +44,8 @@ public class CategoryDAO {
             while (rs.next()) {
                 Category category = new Category();
                 category.setTypeId(rs.getInt("typeId"));
-                category.setCategoryName(rs.getString("categoryName"));
-                category.setMemo(rs.getString("memo"));
+                category.setCategoryName(rs.getNString("categoryName"));
+                category.setMemo(rs.getNString("memo"));
                 categories.add(category);
             }
         }
@@ -55,8 +55,8 @@ public class CategoryDAO {
     public void updateCategory(Category category) throws SQLException {
         String sql = "UPDATE categories SET categoryName = ?, memo = ? WHERE typeId = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, category.getCategoryName());
-            stmt.setString(2, category.getMemo());
+            stmt.setNString(1, category.getCategoryName());
+            stmt.setNString(2, category.getMemo());
             stmt.setInt(3, category.getTypeId());
             stmt.executeUpdate();
         }

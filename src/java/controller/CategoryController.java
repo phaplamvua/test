@@ -92,7 +92,7 @@ public class CategoryController extends HttpServlet {
         response.sendRedirect("MainController?entity=category&action=list");
     }
 
-    private Category extractCategoryFromRequest(HttpServletRequest request) {
+    private Category extractCategoryFromRequest(HttpServletRequest request) {        
         Category category = new Category();
         String typeId = request.getParameter("typeId");
         if (typeId != null && !typeId.isEmpty()) {
