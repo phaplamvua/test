@@ -160,6 +160,12 @@ public class AutoLogin implements Filter {
                     return;
                 }
             }
+            
+            if ("category".equals(entity)) {
+                if ("list".equals(action) || "get".equals(action) || "add".equals(action) || "update".equals(action) || "delete".equals(action)) {
+                    shouldBeSkipped = true;
+                }
+            }
 
             // Nếu yêu cầu thuộc danh sách bỏ qua, cho nó đi tiếp và kết thúc
             if (shouldBeSkipped) {

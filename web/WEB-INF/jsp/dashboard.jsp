@@ -66,7 +66,7 @@
     </head>
     <body>
         <fmt:setLocale value="vi_VN"/>
-        
+
         <h2>Admin Dashboard</h2>
         <div class="menu">
             <button onclick="showSection('category-section')">Quản lý danh mục</button>
@@ -93,29 +93,37 @@
                 </div>
                 <input type="submit" value="Thêm danh mục">
             </form>
-                <div>
-                    <c:if test="${not empty errorCate}">${errorCate}</c:if>
+            <div>
+                <c:if test="${not empty errorCate}">${errorCate}</c:if>
                 </div>
-                
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên danh mục</th>
-                    <th>Ghi chú</th>
-                    <th>Hành động</th>
-                </tr>
-                <c:forEach var="category" items="${categories}">
-                    <tr>
-                        <td>${category.typeId}</td>
-                        <td>${category.categoryName}</td>
-                        <td>${category.memo}</td>
-                        <td>
-                            <a href="/MainController?entity=category&action=get&typeId=${category.typeId}">Sửa</a>
-                            <a href="/MainController?entity=category&action=delete&typeId=${category.typeId}" 
-                               onclick="return confirm('Xóa danh mục này?')">Xóa</a>
-                        </td>
-                    </tr>
-                </c:forEach>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Danh mục</th>
+                            <th>Ghi chú</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="category-table-body">
+                    <%-- Giả sử 'categoryList' là danh sách các danh mục bạn gửi từ Servlet --%>
+                    <c:forEach items="${categories}" var="category">
+                        <tr data-id="${category.typeId}">
+                            <td>${category.typeId}</td>
+                            <td class="category-name">
+                                <span>${category.categoryName}</span>
+                                <%-- Input này bị ẩn và chỉ hiện ra khi nhấn Sửa --%>
+                                <input type="text" value="${category.categoryName}" style="display:none;"/>
+                            </td>
+                            <td>${category.memo}</td>
+                            <td class="actions">
+                                <button class="edit-btn">Sửa</button>
+                                <button class="delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
             </table>
         </div>
 
@@ -235,5 +243,6 @@
                 </c:forEach>
             </table>
         </div>
+        <script src="js/dashboard.js"></script>
     </body>
 </html>

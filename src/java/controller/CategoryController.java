@@ -75,11 +75,15 @@ public class CategoryController extends HttpServlet {
 
     private void addCategory(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException {
-        Category category = extractCategoryFromRequest(request);
-        categoryDAO.addCategory(category);
-        ArrayList<Category> categories = categoryDAO.getAllCategories();
-        request.getSession().setAttribute("categories", categories);
-        response.sendRedirect("/WEB-INF/jsp/dashboard.jsp");
+        try {
+            Category category = extractCategoryFromRequest(request);
+            categoryDAO.addCategory(category);
+            ArrayList<Category> categories = categoryDAO.getAllCategories();
+            request.getSession().setAttribute("categories", categories);
+            request.getRequestDispatcher("/WEB-INF/jsp/dashboard.jsp").forward(request, response);
+        } catch (ServletException ex) {
+            Logger.getLogger(CategoryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void updateCategory(HttpServletRequest request, HttpServletResponse response)
